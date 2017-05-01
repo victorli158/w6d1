@@ -1,0 +1,38 @@
+html, body, h1, ul, li, figure {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  box-sizing: border-box;
+}
+
+ul li {
+  list-style: none;
+  float: left;
+  border-left: 7px solid black;
+  border-top: 7px solid black;
+  background: lightgrey;
+  width: 100px;
+  height: 100px;
+}
+
+ul li:nth-child(3n) {
+  border-right: 7px solid black;
+}
+
+ul li:nth-last-child(-n + 3) {
+  border-bottom: 7px solid black;
+}
+
+ul li:hover {
+  background: yellow;
+}
+
+ul {
+  width: 300px;
+}
+
+body {
+  line-height: 1.5;
+}
