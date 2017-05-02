@@ -7,29 +7,57 @@ class View {
   bindEvents() {
 
     // use arrow to prevent global this scoping
-    $.each($('.cell'), (i, el) => {
-      this.makeMove($(el));
+    $.each($('.cell'), (i, square) => {
+      $(square).on("click", (event) => {
+        this.makeMove($(square));
+      });
     });
   }
 
   makeMove($square) {
-    $square.on("click", (event) => {
-      try {
-        const mark = this.game.currentPlayer;
-        this.game.playMove($square.data("pos"));
-        $square.css("background-color", "white");
-        $square.html(mark);
-      } catch(err) {
-        alert(`Error: ${err.msg}`);
-      }
-      console.log(this.game.winner());
-      if (this.game.isOver()) {
-        $('.ttt').append(`<figcaption>You win, ${this.game.winner()}!</figcaption>`);
-        $.each($('.cell'), (i, el) => {
-          $(el).off("click");
-        });
+
+    try {
+      const mark = this.game.currentPlayer;
+      this.game.playMove($square.data("pos"));
+      $square.css("background-color", "white");
+      $square.html(mark);
+    } catch(err) {
+      alert(`Error: ${err.msg}`);
+    }
+
+    if (this.game.isOver()) {
+      const winner = this.game.winner();
+      this.gameOver(winner);
+    }
+  }
+
+  highlightBoard(winnerMark) {
+
+    $.each($('.cell'), (i, square) => {
+      if ($(square).html() === winnerMark) {
+        $(square).css("background-color", "green");
+        $(square).css("color", "white");
+      } else {
+        $(square).css("background-color", "white");
+        $(square).css("color", "red");
       }
     });
+  }
+
+  unbindEvents() {
+    $.each($('.cell'), (i, square) => {
+      $(square).off("click");
+    });
+  }
+
+  gameOver(winner) {
+    if (winner) {
+      $('.ttt').append(`<figcaption>You win, ${winner}!</figcaption>`);
+    } else {
+      $('.ttt').append(`<figcaption>Cat's game 🐈 !</figcaption>`);
+    }
+    this.highlightBoard(winner);
+    this.unbindEvents();
   }
 
   setupBoard() {
